@@ -5,6 +5,8 @@
     <AssemblyName>Rangers.Antidrift.Drift.Core.Services.AzureDevOps</AssemblyName>
     <RootNamespace>Rangers.Antidrift.Drift.Core.Services</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <Deterministic>False</Deterministic>
   </PropertyGroup>
 
   <ItemGroup>
