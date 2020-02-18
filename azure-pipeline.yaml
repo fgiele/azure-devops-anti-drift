@@ -21,10 +21,6 @@ variables:
   - group: Antidrift-Build
 
 steps:
-- task: GitVersion@5
-  inputs:
-    runtime: 'core'
-
 - task: replacetokens@3
   inputs:
     rootDirectory: 'src'
