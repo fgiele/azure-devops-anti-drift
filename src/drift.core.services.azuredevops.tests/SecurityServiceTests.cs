@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="GraphServiceTests.cs" company="ALM | DevOps Rangers">
+// <copyright file="SecurityServiceTests.cs" company="ALM | DevOps Rangers">
 //    This code is licensed under the MIT License.
 //    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
 //    ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -60,6 +60,9 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
             // Assert
             actual.Should().BeEquivalentTo(expected);
             await Task.CompletedTask.ConfigureAwait(false);
+
+            // Cleanup
+            connection.Dispose();
         }
 
         [TestMethod]
@@ -81,6 +84,9 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
 
             // Assert
             await Task.CompletedTask.ConfigureAwait(false);
+
+            // Cleanup
+            connection.Dispose();
         }
     }
 }

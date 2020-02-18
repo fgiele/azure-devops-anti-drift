@@ -22,7 +22,6 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
     [TestClass]
     public class GraphServiceTests
     {
-
         public TestContext TestContext { get; set; }
 
         public string Organization
@@ -45,7 +44,7 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
             var url = $"https://dev.azure.com/{this.Organization}";
             var connection = new VssConnection(new Uri(url), credentials);
 
-            var teamProject = new TeamProject { Id = Antidrift, Name = "Antidrift" };
+            var teamProject = new TeamProject { Id = this.Antidrift, Name = "Antidrift" };
 
             var expected = new List<string> { "Project Valid Users", "Project Administrators", "Contributors", "Build Administrators", "Readers", "Antidrift Team" };
 
@@ -58,6 +57,9 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
             actual.Select(a => a.Name).Should().Contain(expected);
 
             await Task.CompletedTask.ConfigureAwait(false);
+
+            // Cleanup
+            connection.Dispose();
         }
 
         [TestMethod]
@@ -69,7 +71,7 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
             var connection = new VssConnection(new Uri(url), credentials);
 
             var applicationGroup = new ApplicationGroup { Name = "Contributors" };
-            var teamProject = new TeamProject { Id = Antidrift, Name = "Antidrift" };
+            var teamProject = new TeamProject { Id = this.Antidrift, Name = "Antidrift" };
 
             var expected = new List<string> { "Antidrift Team" };
 
@@ -82,6 +84,9 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
             actual.Should().Contain(expected);
 
             await Task.CompletedTask.ConfigureAwait(false);
+
+            // Cleanup
+            connection.Dispose();
         }
     }
 }
