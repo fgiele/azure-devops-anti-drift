@@ -15,6 +15,6 @@ namespace Rangers.Antidrift.Drift.Core
 
     public interface ISecurityService
     {
-        Task<IEnumerable<Namespace>> GetNamespaces(TeamProject teamProject, ApplicationGroup applicationGroup);
+        Task<IEnumerable<Namespace>> GetNamespaces(TeamProject teamProject, string applicationGroupDescriptor);
     }
 }

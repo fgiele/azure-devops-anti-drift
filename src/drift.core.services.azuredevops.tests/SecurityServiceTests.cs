@@ -55,7 +55,7 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
             var target = new SecurityService(connection);
 
             // Act
-            var actual = await target.GetNamespaces(teamProject, applicationGroups.Single(grp => grp.Name == "Contributors")).ConfigureAwait(false);
+            var actual = await target.GetNamespaces(teamProject, applicationGroups.Single(grp => grp.Name == "Contributors").Descriptor).ConfigureAwait(false);
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -66,7 +66,7 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException), "No descriptor available for ApplicationGroup")]
+        [ExpectedException(typeof(ArgumentNullException))]
         public async Task GetNameSpacesFailsWhenNoIdentityInApplicationGroup()
         {
             // Arrange
@@ -80,7 +80,7 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
             var target = new SecurityService(connection);
 
             // Act
-            await target.GetNamespaces(teamProject, applicationGroup).ConfigureAwait(false);
+            await target.GetNamespaces(teamProject, applicationGroup.Descriptor).ConfigureAwait(false);
 
             // Assert
             await Task.CompletedTask.ConfigureAwait(false);
