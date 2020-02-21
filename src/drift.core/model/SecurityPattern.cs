@@ -95,13 +95,13 @@ namespace Rangers.Antidrift.Drift.Core
             // Check if namespaces are all present
             var missingNamespaces = applicationGroup.Namespaces
                 .Where(ns => currentNamespaces.All(cns => !cns.Name.Equals(ns.Name, StringComparison.OrdinalIgnoreCase)))
-                .Select(ns => new NamespaceDeviation { Namespace = ns, ApplicationGroup = applicationGroup, TeamProject = teamProject, Type = DeviationType.Missing })
+                .Select(ns => new NamespaceDeviation { Name = ns.Name, ApplicationGroup = applicationGroup, TeamProject = teamProject, Type = DeviationType.Missing })
                 .ToList();
 
             // Check for obsolete namespaces.
             var obsoleteNamespaces = currentNamespaces
                 .Where(cns => applicationGroup.Namespaces.All(ns => !ns.Name.Equals(cns.Name, StringComparison.OrdinalIgnoreCase)))
-                .Select(cns => new NamespaceDeviation { Namespace = cns, ApplicationGroup = applicationGroup, TeamProject = teamProject, Type = DeviationType.Obsolete })
+                .Select(cns => new NamespaceDeviation { Name = cns.Name, ApplicationGroup = applicationGroup, TeamProject = teamProject, Type = DeviationType.Obsolete })
                 .ToList();
 
             // Only need to check additional information on those namespaces that match

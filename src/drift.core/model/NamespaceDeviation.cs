@@ -12,7 +12,7 @@ namespace Rangers.Antidrift.Drift.Core
 {
     public class NamespaceDeviation : Deviation
     {
-        public Namespace Namespace { get; set; }
+        public string Name { get; set; }
 
         public ApplicationGroup ApplicationGroup { get; set; }
 
@@ -20,7 +20,7 @@ namespace Rangers.Antidrift.Drift.Core
 
         public override string ToString()
         {
-            return $"Namespace {this.Namespace.Name} is {this.Type} for {this.ApplicationGroup.Name} in Team Project {this.TeamProject.Name}.";
+            return $"Namespace {this.Name} is {this.Type} for {this.ApplicationGroup.Name} in Team Project {this.TeamProject.Name}.";
         }
     }
 }

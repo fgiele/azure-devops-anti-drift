@@ -96,19 +96,12 @@ namespace Rangers.Antidrift.Drift.Core.Tests
         {
             // Arrange
             var members = new[] { "Member 1" };
+            var namesp = new Namespace { Name = "Namespace 1", Allow = new[] { "Allow 1", "Allow 2" }, Deny = new[] { "Deny 1", "Deny 2" } };
             var applicationGroup = new ApplicationGroup
             {
                 Name = "ApplicationGroup 1",
                 Members = members,
-                Namespaces = new[]
-                {
-                    new Namespace
-                    {
-                        Name = "Namespace 1",
-                        Allow = new[] { "Allow 1", "Allow 2" },
-                        Deny = new[] { "Deny 1", "Deny 2"},
-                    },
-                },
+                Namespaces = new[] { namesp },
             };
             var currentApplicationGroup = new List<ApplicationGroup>
             {
@@ -146,14 +139,14 @@ namespace Rangers.Antidrift.Drift.Core.Tests
                     first =>
                     {
                         first.Should().BeOfType<NamespaceDeviation>();
-                        ((NamespaceDeviation)first).Namespace.Should().Be(applicationGroup.Namespaces.First());
+                        ((NamespaceDeviation)first).Name.Should().Be("Namespace 1");
                         ((NamespaceDeviation)first).ApplicationGroup.Should().Be(applicationGroup);
                         ((NamespaceDeviation)first).Type.Should().Be(DeviationType.Missing);
                     },
                     second =>
                     {
                         second.Should().BeOfType<NamespaceDeviation>();
-                        ((NamespaceDeviation)second).Namespace.Should().Be(currentNamespace);
+                        ((NamespaceDeviation)second).Name.Should().Be("Namespace 2");
                         ((NamespaceDeviation)second).ApplicationGroup.Should().Be(applicationGroup);
                         ((NamespaceDeviation)second).Type.Should().Be(DeviationType.Obsolete);
                     });
@@ -166,19 +159,12 @@ namespace Rangers.Antidrift.Drift.Core.Tests
         {
             // Arrange
             var members = new[] { "Member 1" };
+            var namesp = new Namespace { Name = "Namespace 1", Allow = new[] { "Allow 1", "Allow 2" }, Deny = new[] { "Deny 1", "Deny 2" } };
             var applicationGroup = new ApplicationGroup
             {
                 Name = "ApplicationGroup",
                 Members = members,
-                Namespaces = new[]
-                {
-                    new Namespace
-                    {
-                        Name = "Namespace 1",
-                        Allow = new[] { "Allow 1", "Allow 2" },
-                        Deny = new[] { "Deny 1", "Deny 2"},
-                    },
-                },
+                Namespaces = new[] { namesp },
             };
             var currentApplicationGroup = new List<ApplicationGroup>
             {
@@ -216,7 +202,7 @@ namespace Rangers.Antidrift.Drift.Core.Tests
                     first =>
                     {
                         first.Should().BeOfType<NamespacePermissionDeviation>();
-                        ((NamespacePermissionDeviation)first).Namespace.Should().Be(applicationGroup.Namespaces.First());
+                        ((NamespacePermissionDeviation)first).Namespace.Should().Be(namesp);
                         ((NamespacePermissionDeviation)first).ApplicationGroup.Should().Be(applicationGroup);
                         ((NamespacePermissionDeviation)first).AutorizationType.Should().Be(NamespacePermissionDeviation.Autorization.Allow);
                         ((NamespacePermissionDeviation)first).Permission.Should().Be("Allow 1");
@@ -225,7 +211,7 @@ namespace Rangers.Antidrift.Drift.Core.Tests
                     second =>
                     {
                         second.Should().BeOfType<NamespacePermissionDeviation>();
-                        ((NamespacePermissionDeviation)second).Namespace.Should().Be(applicationGroup.Namespaces.First());
+                        ((NamespacePermissionDeviation)second).Namespace.Should().Be(namesp);
                         ((NamespacePermissionDeviation)second).ApplicationGroup.Should().Be(applicationGroup);
                         ((NamespacePermissionDeviation)second).AutorizationType.Should().Be(NamespacePermissionDeviation.Autorization.Allow);
                         ((NamespacePermissionDeviation)second).Permission.Should().Be("Allow 3");
@@ -234,7 +220,7 @@ namespace Rangers.Antidrift.Drift.Core.Tests
                     third =>
                     {
                         third.Should().BeOfType<NamespacePermissionDeviation>();
-                        ((NamespacePermissionDeviation)third).Namespace.Should().Be(applicationGroup.Namespaces.First());
+                        ((NamespacePermissionDeviation)third).Namespace.Should().Be(namesp);
                         ((NamespacePermissionDeviation)third).ApplicationGroup.Should().Be(applicationGroup);
                         ((NamespacePermissionDeviation)third).AutorizationType.Should().Be(NamespacePermissionDeviation.Autorization.Deny);
                         ((NamespacePermissionDeviation)third).Permission.Should().Be("Deny 1");
@@ -243,7 +229,7 @@ namespace Rangers.Antidrift.Drift.Core.Tests
                     fourth =>
                     {
                         fourth.Should().BeOfType<NamespacePermissionDeviation>();
-                        ((NamespacePermissionDeviation)fourth).Namespace.Should().Be(applicationGroup.Namespaces.First());
+                        ((NamespacePermissionDeviation)fourth).Namespace.Should().Be(namesp);
                         ((NamespacePermissionDeviation)fourth).ApplicationGroup.Should().Be(applicationGroup);
                         ((NamespacePermissionDeviation)fourth).AutorizationType.Should().Be(NamespacePermissionDeviation.Autorization.Deny);
                         ((NamespacePermissionDeviation)fourth).Permission.Should().Be("Deny 3");
