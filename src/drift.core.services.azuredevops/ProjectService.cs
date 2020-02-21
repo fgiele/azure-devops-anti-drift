@@ -16,7 +16,7 @@ namespace Rangers.Antidrift.Drift.Core.Services
     using Microsoft.TeamFoundation.Core.WebApi;
     using Microsoft.VisualStudio.Services.WebApi;
 
-    public class ProjectService
+    public class ProjectService : IProjectService
     {
         private readonly VssConnection connection;
 

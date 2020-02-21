@@ -17,6 +17,8 @@ namespace Rangers.Antidrift.Drift.Core
 
     public class Organization
     {
+        private readonly IProjectService projectService;
+
         public IDictionary<string, Guid> Mappings { get; set; } = new Dictionary<string, Guid>();
 
         public IList<Pattern> Patterns { get; set; } = new List<Pattern>();
@@ -24,6 +26,11 @@ namespace Rangers.Antidrift.Drift.Core
         public IList<TeamProject> TeamProjects { get; set; } = new List<TeamProject>();
 
         public IList<Team> Teams { get; set; } = new List<Team>();
+
+        public Organization(IProjectService projectService)
+        {
+            this.projectService = projectService;
+        }
 
         public void Expand()
         {
@@ -47,8 +54,26 @@ namespace Rangers.Antidrift.Drift.Core
 
         public async Task<IEnumerable<Deviation>> CollectDeviations()
         {
-            var tasks = new List<Task<IEnumerable<Deviation>>>();
+            var currentTeamProjects = await projectService.GetProjects().ConfigureAwait(false);
 
+            var deviations = new List<Deviation>();
+
+            var missingTeamProjectDeviations = this.TeamProjects
+                .Where(tp => currentTeamProjects.All(ctp => !ctp.Id.Equals(tp.Id)))
+                .Select(tp => new TeamProjectDeviation { TeamProject = tp, Type = DeviationType.Missing })
+                .ToList();
+
+            var incorrectTeamProjectDeviations = this.TeamProjects
+                .Where(tp => currentTeamProjects.All(ctp => ctp.Id.Equals(tp.Id) && !ctp.Name.Equals(tp.Name, StringComparison.Ordinal)))
+                .Select(tp => new TeamProjectDeviation { TeamProject = tp, Type = DeviationType.Incorrect })
+                .ToList();
+
+            var obsoleteTeamProjectDeviations = currentTeamProjects
+                .Where(ctp => this.TeamProjects.All(tp => !tp.Id.Equals(ctp.Id)))
+                .Select(ctp => new TeamProjectDeviation { TeamProject = ctp, Type = DeviationType.Obsolete })
+                .ToList();
+
+            var tasks = new List<Task<IEnumerable<Deviation>>>();
             foreach (var teamProject in this.TeamProjects)
             {
                 var task = teamProject.CollectDeviations();
@@ -56,7 +81,12 @@ namespace Rangers.Antidrift.Drift.Core
             }
 
             var results = await Task.WhenAll(tasks).ConfigureAwait(false);
-            return results.SelectMany(r => r);
+            deviations.AddRange( results.SelectMany(r => r));
+            deviations.AddRange(missingTeamProjectDeviations);
+            deviations.AddRange(incorrectTeamProjectDeviations);
+            deviations.AddRange(obsoleteTeamProjectDeviations);
+
+            return deviations;
         }
     }
 }

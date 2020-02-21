@@ -1,5 +1,5 @@
-// -----------------------------------------------------------------------
-// <copyright file="DeviationType.cs" company="ALM | DevOps Rangers">
+﻿// -----------------------------------------------------------------------
+// <copyright file="IProjectService.cs" company="ALM | DevOps Rangers">
 //    This code is licensed under the MIT License.
 //    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
 //    ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -10,10 +10,11 @@
 
 namespace Rangers.Antidrift.Drift.Core
 {
-    public enum DeviationType
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    public interface IProjectService
     {
-        Missing,
-        Obsolete,
-        Incorrect,
+        Task<IEnumerable<TeamProject>> GetProjects();
     }
 }
