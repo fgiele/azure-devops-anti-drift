@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="GraphServiceTests.cs" company="ALM | DevOps Rangers">
+// <copyright file="SecurityServiceTests.cs" company="ALM | DevOps Rangers">
 //    This code is licensed under the MIT License.
 //    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
 //    ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -18,9 +18,10 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
     using Microsoft.VisualStudio.Services.Common;
     using Microsoft.VisualStudio.Services.WebApi;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Newtonsoft.Json;
 
     [TestClass]
-    public class GraphServiceTests
+    public class SecurityServiceTests
     {
         public TestContext TestContext { get; set; }
 
@@ -37,25 +38,27 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
         private Guid Antidrift => new Guid(this.TestContext.Properties["antidriftprojectguid"].ToString());
 
         [TestMethod]
-        public async Task GetApplicationGroups()
+        public async Task GetNameSpaces()
         {
             // Arrange
             var credentials = new VssBasicCredential(string.Empty, this.PAT);
             var url = $"https://dev.azure.com/{this.Organization}";
             var connection = new VssConnection(new Uri(url), credentials);
 
+            var graphService = new GraphService(connection);
             var teamProject = new TeamProject { Id = this.Antidrift, Name = "Antidrift" };
 
-            var expected = new List<string> { "Project Valid Users", "Project Administrators", "Contributors", "Build Administrators", "Readers", "Antidrift Team" };
+            var applicationGroups = await graphService.GetApplicationGroups(teamProject).ConfigureAwait(false);
 
-            var target = new GraphService(connection);
+            var expected = JsonConvert.DeserializeObject<List<Namespace>>(System.IO.File.ReadAllText("./ContributorNamespaces.json"));
+
+            var target = new SecurityService(connection);
 
             // Act
-            var actual = await target.GetApplicationGroups(teamProject).ConfigureAwait(false);
+            var actual = await target.GetNamespaces(teamProject, applicationGroups.Single(grp => grp.Name == "Contributors")).ConfigureAwait(false);
 
             // Assert
-            actual.Select(a => a.Name).Should().Contain(expected);
-
+            actual.Should().BeEquivalentTo(expected);
             await Task.CompletedTask.ConfigureAwait(false);
 
             // Cleanup
@@ -63,26 +66,23 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
         }
 
         [TestMethod]
-        public async Task GetMembers()
+        [ExpectedException(typeof(ArgumentNullException))]
+        public async Task GetNameSpacesFailsWhenNoIdentityInApplicationGroup()
         {
             // Arrange
             var credentials = new VssBasicCredential(string.Empty, this.PAT);
             var url = $"https://dev.azure.com/{this.Organization}";
             var connection = new VssConnection(new Uri(url), credentials);
 
-            var applicationGroup = new ApplicationGroup { Name = "Contributors" };
             var teamProject = new TeamProject { Id = this.Antidrift, Name = "Antidrift" };
+            var applicationGroup = new ApplicationGroup { Name = "Contributors" };
 
-            var expected = new List<string> { "Antidrift Team" };
-
-            var target = new GraphService(connection);
+            var target = new SecurityService(connection);
 
             // Act
-            var actual = await target.GetMembers(teamProject, applicationGroup).ConfigureAwait(false);
+            await target.GetNamespaces(teamProject, applicationGroup).ConfigureAwait(false);
 
             // Assert
-            actual.Should().Contain(expected);
-
             await Task.CompletedTask.ConfigureAwait(false);
 
             // Cleanup

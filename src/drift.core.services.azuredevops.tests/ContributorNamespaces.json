@@ -1,0 +1,42 @@
+﻿[
+  {
+    "Allow": [ "View identity information", "Edit identity information" ],
+    "Deny": [],
+    "Name": "Identity"
+  },
+  {
+    "Allow": [ "View", "Use" ],
+    "Deny": [],
+    "Name": "DistributedTask"
+  },
+  {
+    "Allow": [ "Read", "Contribute", "Create branch", "Create tag", "Manage notes", "Contribute to pull requests" ],
+    "Deny": [],
+    "Name": "Git Repositories"
+  },
+  {
+    "Allow": [ "View", "Create" ],
+    "Deny": [],
+    "Name": "Environment"
+  },
+  {
+    "Allow": [ "View project-level information", "Create test runs", "Start a build", "Edit build quality", "Delete test runs", "View test runs", "Manage test environments", "Manage test configurations", "Delete and restore work items" ],
+    "Deny": [],
+    "Name": "Project"
+  },
+  {
+    "Allow": [ "View permissions for this node", "View work items in this node", "Edit work items in this node", "Manage test plans", "Manage test suites" ],
+    "Deny": [],
+    "Name": "CSS"
+  },
+  {
+    "Allow": [ "Enumerate tag definitions", "Create tag definition" ],
+    "Deny": [],
+    "Name": "Tagging"
+  },
+  {
+    "Allow": [ "View builds", "Edit build quality", "Retain indefinitely", "Delete builds ", "Destroy builds", "Update build information", "Queue builds", "Stop builds", "View build pipeline", "Edit build pipeline", "Delete build pipeline" ],
+    "Deny": [],
+    "Name": "Build"
+  }
+]

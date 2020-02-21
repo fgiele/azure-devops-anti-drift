@@ -40,4 +40,10 @@
     <ProjectReference Include="..\drift.core.services.azuredevops\drift.core.services.azuredevops.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ContributorNamespaces.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
