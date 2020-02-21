@@ -44,7 +44,11 @@ namespace Rangers.Antidrift.Drift
             builder.RegisterType<GraphService>()
                    .WithParameter("connection", connection)
                    .As<IGraphService>();
-            
+
+            builder.RegisterType<SecurityService>()
+                   .WithParameter("connection", connection)
+                   .As<ISecurityService>();
+
             builder.RegisterType<SecurityPattern>();
 
             builder.RegisterType<ModelFactory>()
