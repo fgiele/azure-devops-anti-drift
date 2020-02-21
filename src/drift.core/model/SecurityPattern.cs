@@ -43,11 +43,18 @@ namespace Rangers.Antidrift.Drift.Core
             var obsoleteApplicationGroupDeviations = currentApplicationGroups
                 .Where(cag => !cag.IsSpecial)
                 .Where(cag => this.ApplicationGroups.All(ag => !ag.Name.Equals(cag.Name, StringComparison.OrdinalIgnoreCase)))
-                .Select(ag => new ApplicationGroupDeviation { ApplicationGroup = ag, TeamProject = teamProject, Type = DeviationType.Obsolete })
+                .Select(cag => new ApplicationGroupDeviation { ApplicationGroup = cag, TeamProject = teamProject, Type = DeviationType.Obsolete })
                 .ToList();
 
-            foreach (var applicationGroup in this.ApplicationGroups)
+            // Only need to check additional information on those applicationgroups that match
+            var matchingGroups = this.ApplicationGroups
+                .Where(ag => currentApplicationGroups.Select(cag => cag.Name).Contains(ag.Name, StringComparer.OrdinalIgnoreCase));
+
+            foreach (var applicationGroup in matchingGroups)
             {
+                // Set the descriptor of the applicationgroup
+                applicationGroup.Descriptor = currentApplicationGroups.Single(cag => cag.Name.Equals(applicationGroup.Name, StringComparison.OrdinalIgnoreCase)).Descriptor;
+
                 var currentMembers = currentApplicationGroups.Any(ag => ag.Name.Equals(applicationGroup.Name, StringComparison.OrdinalIgnoreCase))
                                      ? (await this.graphService.GetMembers(teamProject, applicationGroup).ConfigureAwait(false))
                                      : new List<string>();
@@ -97,7 +104,11 @@ namespace Rangers.Antidrift.Drift.Core
                 .Select(cns => new NamespaceDeviation { Namespace = cns, ApplicationGroup = applicationGroup, TeamProject = teamProject, Type = DeviationType.Obsolete })
                 .ToList();
 
-            foreach (var namesp in applicationGroup.Namespaces.Where(ns => currentNamespaces.All(cns => cns.Name.Equals(ns.Name, StringComparison.OrdinalIgnoreCase))))
+            // Only need to check additional information on those namespaces that match
+            var matchingNamespaces = applicationGroup.Namespaces
+                .Where(ns => currentNamespaces.Select(cns => cns.Name).Contains(ns.Name, StringComparer.OrdinalIgnoreCase));
+
+            foreach (var namesp in matchingNamespaces)
             {
                 var currentAllowList = currentNamespaces.SingleOrDefault(cns => cns.Name.Equals(namesp.Name, StringComparison.OrdinalIgnoreCase))?.Allow ?? Array.Empty<string>();
                 var currentDenyList = currentNamespaces.SingleOrDefault(cns => cns.Name.Equals(namesp.Name, StringComparison.OrdinalIgnoreCase))?.Deny ?? Array.Empty<string>();

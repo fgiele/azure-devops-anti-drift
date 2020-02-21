@@ -87,7 +87,6 @@ namespace Rangers.Antidrift.Drift.Core.Services
             }
             else
             {
-                Console.WriteLine($"For {securityNamespace.Name} found Allows: {allows.Count()}  & Denies: {denies.Count()}");
                 return null;
             }
         }
