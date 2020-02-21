@@ -16,7 +16,6 @@ namespace Rangers.Antidrift.Drift.Core
         {
             Allow,
             Deny,
-            Unset
         }
 
         public string Permission { get; set; }
