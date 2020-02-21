@@ -32,16 +32,21 @@ namespace Rangers.Antidrift.Drift.Core.Services
             this.client = connection.GetClient<SecurityHttpClient>();
         }
 
-        public async Task<IEnumerable<Namespace>> GetNamespaces(TeamProject teamProject, string applicationGroupDescriptor)
+        public async Task<IEnumerable<Namespace>> GetNamespaces(TeamProject teamProject, ApplicationGroup applicationGroup)
         {
             if (teamProject == null)
             {
                 throw new ArgumentNullException(nameof(teamProject));
             }
 
-            if (string.IsNullOrWhiteSpace(applicationGroupDescriptor))
+            if (applicationGroup == null)
             {
-                throw new ArgumentNullException(nameof(applicationGroupDescriptor));
+                throw new ArgumentNullException(nameof(applicationGroup));
+            }
+
+            if (string.IsNullOrWhiteSpace(applicationGroup.Descriptor))
+            {
+                throw new ArgumentNullException(nameof(applicationGroup.Descriptor));
             }
 
             var securityNamespaces = await this.client.QuerySecurityNamespacesAsync(Guid.Empty).ConfigureAwait(false);
@@ -50,14 +55,14 @@ namespace Rangers.Antidrift.Drift.Core.Services
 
             foreach (var securityNamespace in securityNamespaces)
             {
-                namespaceTasks.Add(this.GetControlList(securityNamespace, applicationGroupDescriptor));
+                namespaceTasks.Add(this.GetControlList(securityNamespace, applicationGroup.Descriptor));
             }
 
             var namespaces = (await Task.WhenAll(namespaceTasks).ConfigureAwait(false)).Where(ns => ns != null);
 
             if (!namespaces.Any())
             {
-                throw new InvalidOperationException($"Cannot get the namespaces for application group {applicationGroupDescriptor}. The application group is not available.");
+                throw new InvalidOperationException($"Cannot get the namespaces for application group {applicationGroup.Name}. The application group is not available.");
             }
 
             return namespaces;

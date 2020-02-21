@@ -56,13 +56,14 @@ namespace Rangers.Antidrift.Drift.Core.Tests
         public void Expand()
         {
             var graphService = new Mock<IGraphService>();
+            var securityService = new Mock<ISecurityService>();
 
             var applicationGroup = new ApplicationGroup { Name = "[{teamProject.Name}]\\Project Administrators" };
-            var pattern = new SecurityPattern(graphService.Object) { Name = "Test" };
+            var pattern = new SecurityPattern(graphService.Object, securityService.Object) { Name = "Test" };
             pattern.ApplicationGroups.Add(applicationGroup);
 
             var teamProject = new TeamProject { Name = "Test", Key = "1" };
-            teamProject.Patterns.Add(new SecurityPattern(graphService.Object) { Name = "Test" });
+            teamProject.Patterns.Add(new SecurityPattern(graphService.Object, securityService.Object) { Name = "Test" });
 
             var target = new Organization();
             target.Mappings.Add("1", Guid.NewGuid());
