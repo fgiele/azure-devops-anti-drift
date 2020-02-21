@@ -119,7 +119,7 @@ namespace Rangers.Antidrift.Drift.Core
                     .Select(al => new NamespacePermissionDeviation
                     {
                         ApplicationGroup = applicationGroup,
-                        AutorizationType = NamespacePermissionDeviation.Autorization.Allow,
+                        AutorizationType = NamespaceAutorization.Allow,
                         Namespace = namesp,
                         Permission = al,
                         TeamProject = teamProject,
@@ -133,7 +133,7 @@ namespace Rangers.Antidrift.Drift.Core
                     .Select(cal => new NamespacePermissionDeviation
                     {
                         ApplicationGroup = applicationGroup,
-                        AutorizationType = NamespacePermissionDeviation.Autorization.Allow,
+                        AutorizationType = NamespaceAutorization.Allow,
                         Namespace = namesp,
                         Permission = cal,
                         TeamProject = teamProject,
@@ -147,7 +147,7 @@ namespace Rangers.Antidrift.Drift.Core
                     .Select(dn => new NamespacePermissionDeviation
                     {
                         ApplicationGroup = applicationGroup,
-                        AutorizationType = NamespacePermissionDeviation.Autorization.Deny,
+                        AutorizationType = NamespaceAutorization.Deny,
                         Namespace = namesp,
                         Permission = dn,
                         TeamProject = teamProject,
@@ -161,7 +161,7 @@ namespace Rangers.Antidrift.Drift.Core
                     .Select(cdn => new NamespacePermissionDeviation
                     {
                         ApplicationGroup = applicationGroup,
-                        AutorizationType = NamespacePermissionDeviation.Autorization.Deny,
+                        AutorizationType = NamespaceAutorization.Deny,
                         Namespace = namesp,
                         Permission = cdn,
                         TeamProject = teamProject,

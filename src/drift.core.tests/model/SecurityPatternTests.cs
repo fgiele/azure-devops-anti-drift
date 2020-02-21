@@ -204,7 +204,7 @@ namespace Rangers.Antidrift.Drift.Core.Tests
                         first.Should().BeOfType<NamespacePermissionDeviation>();
                         ((NamespacePermissionDeviation)first).Namespace.Should().Be(namesp);
                         ((NamespacePermissionDeviation)first).ApplicationGroup.Should().Be(applicationGroup);
-                        ((NamespacePermissionDeviation)first).AutorizationType.Should().Be(NamespacePermissionDeviation.Autorization.Allow);
+                        ((NamespacePermissionDeviation)first).AutorizationType.Should().Be(NamespaceAutorization.Allow);
                         ((NamespacePermissionDeviation)first).Permission.Should().Be("Allow 1");
                         ((NamespacePermissionDeviation)first).Type.Should().Be(DeviationType.Missing);
                     },
@@ -213,7 +213,7 @@ namespace Rangers.Antidrift.Drift.Core.Tests
                         second.Should().BeOfType<NamespacePermissionDeviation>();
                         ((NamespacePermissionDeviation)second).Namespace.Should().Be(namesp);
                         ((NamespacePermissionDeviation)second).ApplicationGroup.Should().Be(applicationGroup);
-                        ((NamespacePermissionDeviation)second).AutorizationType.Should().Be(NamespacePermissionDeviation.Autorization.Allow);
+                        ((NamespacePermissionDeviation)second).AutorizationType.Should().Be(NamespaceAutorization.Allow);
                         ((NamespacePermissionDeviation)second).Permission.Should().Be("Allow 3");
                         ((NamespacePermissionDeviation)second).Type.Should().Be(DeviationType.Obsolete);
                     },
@@ -222,7 +222,7 @@ namespace Rangers.Antidrift.Drift.Core.Tests
                         third.Should().BeOfType<NamespacePermissionDeviation>();
                         ((NamespacePermissionDeviation)third).Namespace.Should().Be(namesp);
                         ((NamespacePermissionDeviation)third).ApplicationGroup.Should().Be(applicationGroup);
-                        ((NamespacePermissionDeviation)third).AutorizationType.Should().Be(NamespacePermissionDeviation.Autorization.Deny);
+                        ((NamespacePermissionDeviation)third).AutorizationType.Should().Be(NamespaceAutorization.Deny);
                         ((NamespacePermissionDeviation)third).Permission.Should().Be("Deny 1");
                         ((NamespacePermissionDeviation)third).Type.Should().Be(DeviationType.Missing);
                     },
@@ -231,7 +231,7 @@ namespace Rangers.Antidrift.Drift.Core.Tests
                         fourth.Should().BeOfType<NamespacePermissionDeviation>();
                         ((NamespacePermissionDeviation)fourth).Namespace.Should().Be(namesp);
                         ((NamespacePermissionDeviation)fourth).ApplicationGroup.Should().Be(applicationGroup);
-                        ((NamespacePermissionDeviation)fourth).AutorizationType.Should().Be(NamespacePermissionDeviation.Autorization.Deny);
+                        ((NamespacePermissionDeviation)fourth).AutorizationType.Should().Be(NamespaceAutorization.Deny);
                         ((NamespacePermissionDeviation)fourth).Permission.Should().Be("Deny 3");
                         ((NamespacePermissionDeviation)fourth).Type.Should().Be(DeviationType.Obsolete);
                     });

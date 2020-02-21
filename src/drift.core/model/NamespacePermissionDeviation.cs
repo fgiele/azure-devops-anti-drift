@@ -12,15 +12,9 @@ namespace Rangers.Antidrift.Drift.Core
 {
     public class NamespacePermissionDeviation : Deviation
     {
-        public enum Autorization
-        {
-            Allow,
-            Deny,
-        }
-
         public string Permission { get; set; }
 
-        public Autorization AutorizationType { get; set; }
+        public NamespaceAutorization AutorizationType { get; set; }
 
         public Namespace Namespace { get; set; }
 
