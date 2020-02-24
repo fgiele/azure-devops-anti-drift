@@ -53,7 +53,7 @@ namespace Rangers.Antidrift.Drift.Core.Tests
         {
             // Arrange
             var applicationGroup = new ApplicationGroup { Name = "ApplicationGroup", Members = new[] { "Member 1" } };
-            var current = new List<ApplicationGroup> { new ApplicationGroup { Name = "ApplicationGroup" } };
+            var current = new List<ApplicationGroup> { new ApplicationGroup { Name = "ApplicationGroup", Descriptor = "test123" } };
             var graphService = new Mock<IGraphService>();
             var teamProject = new TeamProject();
 

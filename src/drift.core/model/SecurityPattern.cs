@@ -44,8 +44,13 @@ namespace Rangers.Antidrift.Drift.Core
                 .Select(ag => new ApplicationGroupDeviation { ApplicationGroup = ag, TeamProject = teamProject, Type = DeviationType.Obsolete })
                 .ToList();
 
-            foreach (var applicationGroup in this.ApplicationGroups)
+            var matchingApplicationGroups = this.ApplicationGroups.Where(ag => currentApplicationGroups.Select(cag => cag.Name).Contains(ag.Name, StringComparer.OrdinalIgnoreCase));
+
+            foreach (var applicationGroup in matchingApplicationGroups)
             {
+                // Set the found descriptor
+                applicationGroup.Descriptor = currentApplicationGroups.Single(cag => cag.Name.Equals(applicationGroup.Name, StringComparison.OrdinalIgnoreCase)).Descriptor;
+
                 var currentMembers = currentApplicationGroups.Any(ag => ag.Name.Equals(applicationGroup.Name, StringComparison.OrdinalIgnoreCase))
                                      ? (await this.graphService.GetMembers(teamProject, applicationGroup).ConfigureAwait(false))
                                      : new List<string>();
