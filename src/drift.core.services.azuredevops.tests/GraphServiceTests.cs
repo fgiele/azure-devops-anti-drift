@@ -67,12 +67,14 @@ namespace Rangers.Antidrift.Drift.Core.Services.AzureDevOps.Tests
             var url = $"https://dev.azure.com/{this.Organization}";
             var connection = new VssConnection(new Uri(url), credentials);
 
-            var applicationGroup = new ApplicationGroup { Name = "Contributors" };
             var teamProject = new TeamProject { Id = this.Antidrift, Name = "Antidrift" };
 
             var expected = new List<string> { "Antidrift Team" };
 
             var target = new GraphService(connection);
+
+            var applicationGroups = await target.GetApplicationGroups(teamProject).ConfigureAwait(false);
+            var applicationGroup = applicationGroups.Single(ag => ag.Name == "Contributors");
 
             // Act
             var actual = await target.GetMembers(teamProject, applicationGroup).ConfigureAwait(false);

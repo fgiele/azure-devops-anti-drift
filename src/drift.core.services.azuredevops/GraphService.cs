@@ -35,7 +35,7 @@ namespace Rangers.Antidrift.Drift.Core.Services
             }
 
             var client = this.connection.GetClient<GraphHttpClient>();
-            
+
             var descriptor = await client.GetDescriptorAsync(teamProject.Id).ConfigureAwait(false);
             var result = await client.ListGroupsAsync(descriptor.Value).ConfigureAwait(false);
 
@@ -56,18 +56,16 @@ namespace Rangers.Antidrift.Drift.Core.Services
                 throw new ArgumentNullException(nameof(applicationGroup));
             }
 
-            var client = this.connection.GetClient<GraphHttpClient>();
-            
-            var descriptor = await client.GetDescriptorAsync(teamProject.Id).ConfigureAwait(false);
-            var graphGroups = await client.ListGroupsAsync(descriptor.Value).ConfigureAwait(false); // TODO: Overhead
-            var group = graphGroups.GraphGroups.FirstOrDefault(g => g.DisplayName.Equals(applicationGroup.Name, StringComparison.OrdinalIgnoreCase));
-
-            if (group == null)
+            if (string.IsNullOrWhiteSpace(applicationGroup.Descriptor))
             {
-                throw new InvalidOperationException($"Cannot get the members fro application group {applicationGroup.Name}. the application group is not available.");
+                throw new ArgumentException("Descriptor has not been set",nameof(applicationGroup));
             }
 
-            var memberships = await client.ListMembershipsAsync(group.Descriptor.ToString(), GraphTraversalDirection.Down).ConfigureAwait(false);
+            var client = this.connection.GetClient<GraphHttpClient>();
+
+            var groupDescriptor = new Microsoft.VisualStudio.Services.Common.SubjectDescriptor(Constants.SubjectType.VstsGroup, applicationGroup.Descriptor);
+
+            var memberships = await client.ListMembershipsAsync(groupDescriptor, GraphTraversalDirection.Down).ConfigureAwait(false);
             var lookupKeys = memberships
                 .Select(m => new GraphSubjectLookupKey(m.MemberDescriptor)) // TODO: not sure what to fill in subject type.
                 .ToList();
